@@ -35,6 +35,10 @@ function Player:update(dt)
    end
 end
 
+function Player:location()
+   return Point(self.body:getX(), self.body:getY())
+end
+
 --------------------------------------------------
 
 -- Reads the keyboard arrow keys and returns a direction (as a point),

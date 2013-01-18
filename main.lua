@@ -26,9 +26,15 @@ function love.load()
 end
 
 function love.draw()
+   love.graphics.push()
+
+   local center = player:location()
+   love.graphics.translate(-center.x + 400, -center.y + 300)
    player:draw()
    for _, c in ipairs(crates) do c:draw() end
    for _, m in ipairs(mobs) do m:draw() end
+
+   love.graphics.pop()
 end
 
 function love.update(dt)
