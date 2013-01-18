@@ -1,5 +1,6 @@
 require('middleclass')
 require('Point')
+require('List')
 require('Player')
 require('Crate')
 require('Mob')
@@ -16,13 +17,13 @@ function love.load()
  
    world = love.physics.newWorld(0, 0)
    player = Player(world)
-   crates = { Crate(world, 5, 5),
-              Crate(world, 5, 6) }
-   mobs = { Mob(world, Point(100, 100), player, 150, 50),
-            Mob(world, Point(100, 100), player, 300, 10),
-            Mob(world, Point(100, 100), player, 80, 95),
-            Mob(world, Point(100, 100), player, 80, 95),
-            Mob(world, Point(100, 100), player, 80, 95), }
+   crates = List{ Crate(world, 5, 5),
+                  Crate(world, 5, 6) }
+   mobs = List{ Mob(world, Point(100, 100), player, 150, 50),
+                Mob(world, Point(100, 100), player, 300, 10),
+                Mob(world, Point(100, 100), player, 80, 95),
+                Mob(world, Point(100, 100), player, 80, 95),
+                Mob(world, Point(100, 100), player, 80, 95), }
 end
 
 function love.draw()
@@ -31,15 +32,15 @@ function love.draw()
    local center = player:location()
    love.graphics.translate(-center.x + 400, -center.y + 300)
    player:draw()
-   for _, c in ipairs(crates) do c:draw() end
-   for _, m in ipairs(mobs) do m:draw() end
+   crates:method_map('draw')
+   mobs:method_map('draw')
 
    love.graphics.pop()
 end
 
 function love.update(dt)
    player:update(dt)
-   for _, c in ipairs(crates) do c:update(dt) end
-   for _, m in ipairs(mobs) do m:update(dt) end
+   crates:method_map('update', dt)
+   mobs:method_map('update', dt)
    world:update(dt)
 end
