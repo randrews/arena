@@ -1,6 +1,7 @@
 require 'Point'
 
 Player = class('Player')
+Player.CATEGORY = 1
 
 function Player:initialize(world)
    local b = love.physics.newBody(world, 48, 48, 'dynamic')

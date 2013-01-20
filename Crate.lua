@@ -1,6 +1,7 @@
 require('middleclass')
 
 Crate = class('Crate')
+Crate.CATEGORY = 3
 
 function Crate:initialize(world, x, y)
    local b = love.physics.newBody(world, x*32 + 16, y*32 + 16, 'dynamic')

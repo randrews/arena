@@ -1,10 +1,12 @@
 require 'middleclass'
 
 Mob = class('Mob')
+Mob.CATEGORY = 2
 
 function Mob:initialize(world, location, target, range, speed)
    assert(world and target and location)
 
+   self.world = world
    self.target = target
    self.range = range or 0
    self.speed = speed or 50
@@ -13,7 +15,8 @@ function Mob:initialize(world, location, target, range, speed)
 
    local b = love.physics.newBody(world, location.x, location.y, 'dynamic')
    local s = love.physics.newCircleShape(16)
-   love.physics.newFixture(b, s)
+   self.fixture = love.physics.newFixture(b, s)
+   self.fixture:setCategory(Mob.CATEGORY)
    b:setMass(1)
    b:setAngularDamping(3)
    b:setLinearDamping((110 - self.speed) / 5)
@@ -42,6 +45,10 @@ function Mob:draw()
           b:getX() + 50 * math.cos(b:getAngle()),
           b:getY() + 50 * math.sin(b:getAngle()))
 
+end
+
+function Mob:location()
+   return Point(self.body:getX(), self.body:getY())
 end
 
 function Mob:distance_to_target()

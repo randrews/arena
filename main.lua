@@ -1,9 +1,12 @@
 require('middleclass')
 require('Point')
+require('Clock')
 require('List')
+require('Bullet')
 require('Player')
 require('Crate')
 require('Mob')
+require('Shooter')
 
 local world = nil
 local player = nil
@@ -23,7 +26,7 @@ function love.load()
                 Mob(world, Point(100, 100), player, 300, 10),
                 Mob(world, Point(100, 100), player, 80, 95),
                 Mob(world, Point(100, 100), player, 80, 95),
-                Mob(world, Point(100, 100), player, 80, 95), }
+                Shooter(world, Point(100, 100), player), }
 end
 
 function love.draw()
@@ -34,11 +37,13 @@ function love.draw()
    player:draw()
    crates:method_map('draw')
    mobs:method_map('draw')
+   Bullet.draw()
 
    love.graphics.pop()
 end
 
 function love.update(dt)
+   Clock.update(dt)
    player:update(dt)
    crates:method_map('update', dt)
    mobs:method_map('update', dt)
