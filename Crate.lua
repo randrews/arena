@@ -1,17 +1,15 @@
 require('middleclass')
+require('Entity')
 
-Crate = class('Crate')
+Crate = class('Crate', Entity)
 Crate.CATEGORY = 3
 
 function Crate:initialize(world, x, y)
-   local b = love.physics.newBody(world, x*32 + 16, y*32 + 16, 'dynamic')
-   local s = love.physics.newRectangleShape(0, 0, 32, 32)
-   love.physics.newFixture(b, s)
-   b:setFixedRotation(true)
-   b:setMass(5)
-   b:setLinearDamping(4)
-   self.body = b
-   self.shape = s
+   self:rectangle(world, Point(x, y), 32, 32)
+   self.body:setFixedRotation(true)
+   self.body:setMass(5)
+   self.body:setLinearDamping(4)
+
    self.nudge_accel = 40 -- This needs to be scaled with player.speed
 end
 
