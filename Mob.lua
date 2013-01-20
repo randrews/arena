@@ -1,35 +1,27 @@
 require 'middleclass'
+require('Entity')
 
-Mob = class('Mob')
+Mob = class('Mob', Entity)
 Mob.CATEGORY = 2
 
 function Mob:initialize(world, location, target, range, speed)
-   assert(world and target and location)
-
-   self.world = world
    self.target = target
    self.range = range or 0
    self.speed = speed or 50
-
-   assert(self.speed > 0 and self.speed <= 100)
-
-   local b = love.physics.newBody(world, location.x, location.y, 'dynamic')
-   local s = love.physics.newCircleShape(16)
-   self.fixture = love.physics.newFixture(b, s)
-   self.fixture:setCategory(Mob.CATEGORY)
-   b:setMass(1)
-   b:setAngularDamping(3)
-   b:setLinearDamping((110 - self.speed) / 5)
-
+   self.color = {110, 140, 190}
    self.turn_speed = 100 * (self.speed) / 5
    self.accel = 640
 
-   self.body=b
-   self.shape=s
+   assert(world and target and location)
+   assert(self.speed > 0 and self.speed <= 100)
 
-   b:setAngle(self:angle_to_target())
+   self:circle(world, location, 16)
+   self.fixture:setCategory(Mob.CATEGORY)
 
-   self.color = {110, 140, 190}
+   self.body:setMass(1)
+   self.body:setAngularDamping(3)
+   self.body:setLinearDamping((110 - self.speed) / 5)
+   self.body:setAngle(self:angle_to_target())
 end
 
 function Mob:draw()
@@ -45,10 +37,6 @@ function Mob:draw()
           b:getX() + 50 * math.cos(b:getAngle()),
           b:getY() + 50 * math.sin(b:getAngle()))
 
-end
-
-function Mob:location()
-   return Point(self.body:getX(), self.body:getY())
 end
 
 function Mob:distance_to_target()
@@ -81,17 +69,6 @@ function Mob:turn_toward_target()
    end
 end
 
--- Limits mob max linear speed
-function Mob:max_speed()
-   local max = 600
-   local x, y = self.body:getLinearVelocity()
-   if x*x + y*y > max*max then
-      local a = math.atan2(y,x)
-      self.body:setLinearVelocity(max * math.cos(a),
-                                  max * math.sin(a))
-   end
-end
-
 function Mob:update()
    local dist = self:distance_to_target()
    local accel = self.accel
@@ -109,5 +86,5 @@ function Mob:update()
    else
    end
 
-   self:max_speed()
+   self:max_speed(600)
 end

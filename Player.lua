@@ -1,15 +1,12 @@
 require 'Point'
+require 'Entity'
 
-Player = class('Player')
+Player = class('Player', Entity)
 Player.CATEGORY = 1
 
 function Player:initialize(world)
-   local b = love.physics.newBody(world, 48, 48, 'dynamic')
-   local s = love.physics.newCircleShape(16)
-   love.physics.newFixture(b, s)
-   b:setMass(1)
-   self.body=b
-   self.shape=s
+   self:circle(world, Point(48, 48), 16)
+   self.body:setMass(1)
    self.speed = 640 -- 320 is also good
 end
 
@@ -28,16 +25,12 @@ function Player:update(dt)
       self.body:setLinearDamping(8)
    end
 
-   self:max_speed()
+   self:max_speed(self.speed)
    self.body:applyForce(dir.x * self.speed, dir.y * self.speed)
 
    if keys_down == 1 then
       self:dampenSidewaysVelocity(dir, dt)
    end
-end
-
-function Player:location()
-   return Point(self.body:getX(), self.body:getY())
 end
 
 --------------------------------------------------
@@ -54,16 +47,6 @@ function Player:readDirection()
    if k('right') then dir = dir + Point.right ; kd = kd + 1 end
 
    return dir, kd
-end
-
--- Limits player max linear speed
-function Player:max_speed()
-   local x, y = self.body:getLinearVelocity()
-   if x*x + y*y > self.speed*self.speed then
-      local a = math.atan2(y,x)
-      self.body:setLinearVelocity(self.speed * math.cos(a),
-                                  self.speed * math.sin(a))
-   end
 end
 
 -- Dampens tangential motion while we're accelerating in a direction

@@ -1,12 +1,13 @@
-Bullet = class('Bullet')
+require('List')
+require('Entity')
+
+Bullet = class('Bullet', Entity)
 
 Bullet.bullets = List{}
 
 function Bullet:initialize(world, location, angle)
+   self:circle(world, location, 2)
    self.angle = angle
-   self.body = love.physics.newBody(world, location.x, location.y, 'dynamic')
-   self.shape = love.physics.newCircleShape(2)
-   self.fixture = love.physics.newFixture(self.body, self.shape)
    self.body:setMass(0.1)
    Bullet.bullets:push(self)
 end
