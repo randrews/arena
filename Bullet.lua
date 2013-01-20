@@ -1,15 +1,15 @@
-require('List')
+require('Set')
 require('Entity')
 
 Bullet = class('Bullet', Entity)
 
-Bullet.bullets = List{}
+Bullet.bullets = Set()
 
 function Bullet:initialize(world, location, angle)
    self:circle(world, location, 2)
    self.angle = angle
    self.body:setMass(0.1)
-   Bullet.bullets:push(self)
+   Bullet.bullets:add(self)
 end
 
 function Bullet:draw()
@@ -19,6 +19,11 @@ function Bullet:draw()
 
    g.setColor(220, 220, 0)
    g.circle('fill', b:getX(), b:getY(), s:getRadius(), 20)
+end
+
+function Bullet:collision()
+   Bullet.bullets:remove(self)
+   self:remove() -- Doesn't matter what we hit, we hit something.
 end
 
 function Bullet:fire(speed)

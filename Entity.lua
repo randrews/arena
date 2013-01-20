@@ -1,4 +1,5 @@
 Entity = class('Entity')
+Entity.graveyard = List{} -- List of entities to be removed
 
 function Entity:setup(world, location, shape)
    assert(world and location and shape)
@@ -36,5 +37,34 @@ function Entity:max_speed(max)
       local a = math.atan2(y,x)
       self.body:setLinearVelocity(max * math.cos(a),
                                   max * math.sin(a))
+   end
+end
+
+-- Adds this to Entity.graveyard to be removed at the end of the tick
+function Entity:remove()
+   if self.dead then return end
+   Entity.graveyard:push(self)
+   self.dead = true
+end
+
+----------------------------------------
+
+function Entity.static.setup(world)
+   world:setCallbacks(Entity.collision)
+end
+
+function Entity.static.collision(fix_a, fix_b)
+   local ent_a, ent_b = fix_a:getUserData(), fix_b:getUserData()
+   if ent_a.collision then ent_a:collision(ent_b) end
+   if ent_b.collision then ent_b:collision(ent_a) end
+end
+
+function Entity.static.cull()
+   if not Entity.graveyard:empty() then
+      Entity.graveyard:map(function(ent)
+                              -- ent.body:destroy()
+                              ent.fixture:destroy()
+                           end)
+      Entity.graveyard:clear()
    end
 end

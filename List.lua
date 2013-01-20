@@ -36,6 +36,10 @@ function List:clear()
    self.items = {}
 end
 
+function List:empty()
+   return #(self.items) == 0
+end
+
 ----------------------------------------
 
 function List:map(fn, ...)

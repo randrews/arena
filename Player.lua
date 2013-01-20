@@ -1,5 +1,6 @@
 require 'Point'
 require 'Entity'
+require 'Bullet'
 
 Player = class('Player', Entity)
 Player.CATEGORY = 1
@@ -30,6 +31,12 @@ function Player:update(dt)
 
    if keys_down == 1 then
       self:dampenSidewaysVelocity(dir, dt)
+   end
+end
+
+function Player:collision(entity)
+   if instanceOf(Bullet, entity) then
+      print("Shot")
    end
 end
 

@@ -2,6 +2,7 @@ require('middleclass')
 require('Point')
 require('Clock')
 require('List')
+require('Entity')
 require('Bullet')
 require('Player')
 require('Crate')
@@ -19,6 +20,8 @@ function love.load()
    love.graphics.setBackgroundColor(64, 120, 64)
  
    world = love.physics.newWorld(0, 0)
+   Entity.setup(world)
+
    player = Player(world)
    crates = List{ Crate(world, 5, 5),
                   Crate(world, 5, 6) }
@@ -48,4 +51,5 @@ function love.update(dt)
    crates:method_map('update', dt)
    mobs:method_map('update', dt)
    world:update(dt)
+   Entity.cull()
 end
