@@ -1,9 +1,9 @@
 Entity = class('Entity')
 Entity.graveyard = List{} -- List of entities to be removed
 
-function Entity:setup(world, location, shape)
+function Entity:setup(world, location, shape, body)
    assert(world and location and shape)
-   self.body = love.physics.newBody(world, location.x, location.y, 'dynamic')
+   self.body = body or love.physics.newBody(world, location.x, location.y, 'dynamic')
    self.shape = shape
    self.fixture = love.physics.newFixture(self.body, self.shape)
    self.world = world

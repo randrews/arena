@@ -5,12 +5,14 @@ require('List')
 require('Entity')
 require('Bullet')
 require('Player')
+require('Wall')
 require('Crate')
 require('Mob')
 require('Shooter')
 
 local world = nil
 local player = nil
+local walls = nil
 local crates = nil
 local mobs = nil
 
@@ -21,6 +23,7 @@ function love.load()
  
    world = love.physics.newWorld(0, 0)
    Entity.setup(world)
+   Wall.setup(world)
 
    player = Player(world)
    crates = List{ Crate(world, 5, 5),
@@ -30,6 +33,8 @@ function love.load()
                 Mob(world, Point(100, 100), player, 80, 95),
                 Mob(world, Point(100, 100), player, 80, 95),
                 Shooter(world, Point(100, 100), player), }
+
+   walls = List{ Wall(Point(50, 50), 128, 32) }
 end
 
 function love.draw()
@@ -40,6 +45,7 @@ function love.draw()
    player:draw()
    crates:method_map('draw')
    mobs:method_map('draw')
+   walls:method_map('draw')
    Bullet.draw()
 
    love.graphics.pop()
