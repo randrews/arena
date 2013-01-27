@@ -1,8 +1,14 @@
 require('middleclass')
+
 require('Point')
 require('Clock')
 require('List')
 require('Entity')
+
+require('Behavior')
+require('Follow')
+require('Shoot')
+
 require('Bullet')
 require('Player')
 require('Wall')
@@ -33,6 +39,11 @@ function love.load()
                 Mob(world, Point(100, 100), player, 80, 95),
                 Mob(world, Point(100, 100), player, 80, 95),
                 Shooter(world, Point(100, 100), player), }
+
+   mobs.items[1]:set_behavior(Follow(player, 150, 50))
+   mobs.items[2]:set_behavior(Follow(player, 300, 30))
+   mobs.items[3]:set_behavior(Follow(player, 80, 95))
+   mobs.items[4]:set_behavior(Follow(player, 80, 95))
 
    walls = List{ Wall(Point(50, 50), 128, 32) }
 end

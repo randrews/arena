@@ -3,18 +3,12 @@ require 'Entity'
 
 Wall = class('Wall', Entity)
 
+-- All the walls share a body since they never move, so
+-- we set that up in one place
 function Wall.static.setup(world)
    local ph = love.physics
    Wall.world = world
    Wall.body = ph.newBody(Wall.world, 0, 0, 'static')
-
-   -- for p in self:each() do
-   --    if self(p) == '#' then
-   --       local s = ph.newRectangleShape(p.x*SIZE + SIZE/2, p.y*SIZE + SIZE/2,
-   --                                      SIZE, SIZE)
-   --       self.manager:add(walls, s, 'wall')
-   --    end
-   -- end
 end
 
 function Wall:initialize(location, width, height)
