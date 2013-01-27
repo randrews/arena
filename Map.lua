@@ -2,18 +2,18 @@ require('middleclass')
 require('Point')
 require('List')
 
-Level = class('Level')
+Map = class('Map')
 
-function Level:initialize(width, height)
+function Map:initialize(width, height)
    self.width = width
    self.height = height
-   self.map = List{}
-   for i=1, width*height do self.map:push(0) end
+   self.cells = List{}
+   for i=1, width*height do self.cells:push(0) end
 end
 
-function Level.static.new_from_strings(strs)
+function Map.static.new_from_strings(strs)
    assert(type(strs) == 'table' and type(strs[1])=='string')
-   local l = Level(#(strs[1]), #strs)
+   local l = Map(#(strs[1]), #strs)
    for p in l:each() do
       local s = strs[p.y+1]:sub(p.x+1, p.x+1)
       l:at(p, s)
@@ -21,18 +21,18 @@ function Level.static.new_from_strings(strs)
    return l
 end
 
-function Level:at(pt, val)
+function Map:at(pt, val)
    if self:inside(pt) then
-      if val~=nil then self.map[pt.x+pt.y*self.width] = val end
-      return self.map[pt.x+pt.y*self.width]
+      if val~=nil then self.cells[pt.x+pt.y*self.width] = val end
+      return self.cells[pt.x+pt.y*self.width]
    else
       return nil
    end
 end
 
-Level.__call = Level.at
+Map.__call = Map.at
 
-function Level:clamp(pt)
+function Map:clamp(pt)
    pt = pt:copy()
    if pt.x < 0 then pt.x = 0 end
    if pt.x > self.width-1 then pt.x = self.width-1 end
@@ -41,17 +41,17 @@ function Level:clamp(pt)
    return pt
 end
 
-function Level:inside(pt)
+function Map:inside(pt)
    return pt >= Point(0, 0) and pt < Point(self.width, self.height)
 end
 
-function Level:clear(value)
+function Map:clear(value)
    for p in self:each() do
       self:at(p, value)
    end
 end
 
-function Level:each(start, w, h)
+function Map:each(start, w, h)
    local maxx, maxy
 
    if w then maxx = start.x + w-1 else maxx = self.width-1 end
@@ -72,7 +72,7 @@ function Level:each(start, w, h)
           end
 end
 
-function Level:__tostring()
+function Map:__tostring()
    local s = ''
 
    for y = 0, self.height-1 do
@@ -85,7 +85,7 @@ function Level:__tostring()
    return s
 end
 
-function Level:find(fn)
+function Map:find(fn)
    assert(type(fn) == 'function')
    local fit = List{}
    for pt in self:each() do
@@ -94,7 +94,7 @@ function Level:find(fn)
    return fit
 end
 
-function Level:random(fn)
+function Map:random(fn)
    fn = fn or function() return true end
    local fit = self:find(fn)
    if fit:empty() then return nil
@@ -103,15 +103,15 @@ end
 
 ----------------------------------------
 
-function Level:empty(pt)
+function Map:empty(pt)
    return self:at(pt) == ''
 end
 
-function Level:full(pt)
+function Map:full(pt)
    return not self:empty(pt)
 end
 
-function Level:neighbors(pt, fn)
+function Map:neighbors(pt, fn)
    local all = {pt + Point(-1, 0),
                 pt + Point(1, 0),
                 pt + Point(0, -1),
@@ -126,9 +126,9 @@ end
 
 ----------------------------------------
 
-function Level.static.test()
+function Map.static.test()
    -- Constructor
-   local m = Level(10, 10)
+   local m = Map(10, 10)
    assert(m.width == 10)
    assert(m:inside(Point(3,3)))
    assert(not m:inside(Point(10,10)))
@@ -160,4 +160,4 @@ function Level.static.test()
    assert(n2 == 16)
 end
 
-return Level
+return Map

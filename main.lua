@@ -4,7 +4,7 @@ require('Point')
 require('Clock')
 require('List')
 require('Entity')
-require('Level')
+require('Map')
 require('Behavior')
 
 require('Follow')
