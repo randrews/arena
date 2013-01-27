@@ -3,6 +3,9 @@ require('middleclass')
 require('Point')
 require('List')
 require('Map')
+require('Player')
+require('Crate')
+require('Gem')
 
 Level = class('Level')
 
@@ -27,6 +30,8 @@ function Level:load()
          entity = Wall(p, 32, 32)
       elseif c == 'o' then
          entity = Crate(self.world, p.x, p.y)
+      elseif c == '*' then
+         entity = Gem(self.world, p)
       elseif c == '@' then
          player_loc = p
       end
@@ -34,7 +39,7 @@ function Level:load()
       if entity then self.entities:push(entity) end
    end
 
-   assert(player_loc)
+   assert(player_loc, "Your map doesn't have a player on it.")
    self.player = Player(self.world, player_loc)
 end
 
