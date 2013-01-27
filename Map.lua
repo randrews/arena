@@ -94,6 +94,11 @@ function Map:find(fn)
    return fit
 end
 
+function Map:find_value(value)
+   local fn = function(map, pt) return map(pt) == value end
+   return self:find(fn)
+end
+
 function Map:random(fn)
    fn = fn or function() return true end
    local fit = self:find(fn)
