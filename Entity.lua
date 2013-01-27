@@ -30,6 +30,9 @@ function Entity:draw()
    love.graphics.circle('line', loc.x, loc.y, 5, 20)
 end
 
+function Entity:update(dt)
+end
+
 -- Limits max linear speed
 function Entity:max_speed(max)
    local x, y = self.body:getLinearVelocity()
