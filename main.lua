@@ -4,8 +4,9 @@ require('Point')
 require('Clock')
 require('List')
 require('Entity')
-
+require('Level')
 require('Behavior')
+
 require('Follow')
 require('Shoot')
 

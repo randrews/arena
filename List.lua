@@ -40,6 +40,11 @@ function List:empty()
    return #(self.items) == 0
 end
 
+function List:random()
+   if self:empty() then return nil
+   else return self.items[math.random(#self.items)] end
+end
+
 ----------------------------------------
 
 function List:map(fn, ...)
