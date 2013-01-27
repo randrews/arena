@@ -5,19 +5,19 @@ Crate = class('Crate', Entity)
 Crate.CATEGORY = 3
 
 function Crate:initialize(world, x, y)
-   self:rectangle(world, Point(x, y), 32, 32)
+   self:rectangle(world, Point(x, y), 30, 30)
    self.body:setFixedRotation(true)
    self.body:setMass(5)
    self.body:setLinearDamping(4)
 
-   self.nudge_accel = 40 -- This needs to be scaled with player.speed
+   self.nudge_accel = 20 -- This needs to be scaled with player.speed
 end
 
 function Crate:draw()
    love.graphics.setColor(180, 120, 90)
    love.graphics.rectangle('fill',
-                           self.body:getX()-16,
-                           self.body:getY()-16, 32, 32)
+                           self.body:getX()-15,
+                           self.body:getY()-15, 30, 30)
 end
 
 function Crate:update(dt)

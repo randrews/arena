@@ -5,10 +5,10 @@ require 'Bullet'
 Player = class('Player', Entity)
 Player.CATEGORY = 1
 
-function Player:initialize(world)
-   self:circle(world, Point(48, 48), 16)
+function Player:initialize(world, location)
+   self:circle(world, location, 14)
    self.body:setMass(1)
-   self.speed = 640 -- 320 is also good
+   self.speed = 320 -- 640 is also good
 end
 
 function Player:draw()
