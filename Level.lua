@@ -53,6 +53,7 @@ function Level:update(dt)
    self.player:update(dt)
    self.entities:method_map('update', dt)
    self.world:update(dt)
+   self.entities = self.entities:method_select('alive')
 end
 
 return Level

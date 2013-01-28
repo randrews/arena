@@ -32,6 +32,12 @@ function List:length()
    return #(self.items)
 end
 
+function List:at(i, v)
+   if v then self.items[i] = v end
+   return self.items[i]
+end
+List.__call = List.at
+
 function List:clear()
    self.items = {}
 end
@@ -63,6 +69,27 @@ function List:method_map(fn_name, ...)
    for _, item in ipairs(self.items) do
       local fn = item[fn_name]
       result:push( fn(item, ...) )
+   end
+
+   return result
+end
+
+function List:select(fn, ...)
+   local result = List()
+
+   for _, item in ipairs(self.items) do
+      if fn(item, ...) then result:push( item ) end
+   end
+
+   return result
+end
+
+function List:method_select(fn_name, ...)
+   local result = List()
+
+   for _, item in ipairs(self.items) do
+      local fn = item[fn_name]
+      if fn(item, ...) then result:push( item ) end
    end
 
    return result

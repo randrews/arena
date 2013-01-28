@@ -72,18 +72,14 @@ function love.draw()
 
    level:draw()
 
-   -- crates:method_map('draw')
-   -- mobs:method_map('draw')
-   -- walls:method_map('draw')
-   -- Bullet.draw()
-
    love.graphics.pop()
+
+   if FPS then love.graphics.setColor(255, 255, 255) ; love.graphics.print(FPS, 0, 0) end
 end
 
 function love.update(dt)
+   FPS = math.floor(1 / dt)
    Clock.update(dt)
-   -- crates:method_map('update', dt)
-   -- mobs:method_map('update', dt)
    level:update(dt)
    Entity.cull()
 end

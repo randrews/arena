@@ -50,6 +50,8 @@ function Entity:remove()
    self.dead = true
 end
 
+function Entity:alive() return not self.dead end
+
 -- Implement this to handle collisions with other entities.
 -- function Entity:collision(entity)
 

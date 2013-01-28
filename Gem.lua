@@ -26,6 +26,7 @@ end
 function Gem:collision(other)
    if other.class == Player then
       print("Jem!")
+      self:remove()
    elseif other.class == Crate then
       local dx = other.body:getX() - self.body:getX()
       local dy = other.body:getY() - self.body:getY()
