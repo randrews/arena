@@ -13,6 +13,7 @@ function Level:initialize(opts)
    assert(type(opts) == 'table')
 
    self.map = Map.new_from_strings(opts.map)
+   self.zoom = 0.1
 end
 
 function Level:load()
@@ -44,12 +45,32 @@ function Level:load()
 end
 
 function Level:draw()
+   love.graphics.push()
+   love.graphics.scale(self.zoom)
+   local center = self.player:location()
+   local width, height = love.graphics.getWidth(), love.graphics.getHeight()
+   love.graphics.translate(width/2/self.zoom - center.x,
+                           height/2/self.zoom - center.y)
+
+   --------------------
+
    Bullet.draw()
    self.player:draw()
    self.entities:method_map('draw')
+   Effect.draw()
+
+   --------------------
+
+   love.graphics.pop()
+
 end
 
 function Level:update(dt)
+   if self.zoom < 1 then
+      self.zoom = self.zoom + dt
+      if self.zoom > 1 then self.zoom = 1 end
+   end
+
    self.player:update(dt)
    self.entities:method_map('update', dt)
    self.world:update(dt)

@@ -50,33 +50,10 @@ function love.load()
    }
 
    level:load()
- 
-   -- player = Player(world)
-   -- crates = List{ Crate(world, 5, 5),
-   --                Crate(world, 5, 6) }
-   -- mobs = List{ Mob(world, Point(100, 100), player, 150, 50),
-   --              Mob(world, Point(100, 100), player, 300, 10),
-   --              Mob(world, Point(100, 100), player, 80, 95),
-   --              Mob(world, Point(100, 100), player, 80, 95),
-   --              Shooter(world, Point(100, 100), player), }
-
-   -- mobs.items[1]:set_behavior(Follow(player, 150, 50))
-   -- mobs.items[2]:set_behavior(Follow(player, 300, 30))
-   -- mobs.items[3]:set_behavior(Follow(player, 80, 95))
-   -- mobs.items[4]:set_behavior(Follow(player, 80, 95))
 end
 
 function love.draw()
-   love.graphics.push()
-
-   local center = level.player:location()
-   love.graphics.translate(-center.x + 400, -center.y + 300)
-
    level:draw()
-   Effect.draw()
-
-   love.graphics.pop()
-
    if FPS then love.graphics.setColor(255, 255, 255) ; love.graphics.print(FPS, 0, 0) end
 end
 
