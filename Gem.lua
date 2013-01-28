@@ -1,5 +1,7 @@
 require('middleclass')
 require('Entity')
+require('Player')
+require('Crate')
 
 Gem = class('Gem', Entity)
 
@@ -19,6 +21,16 @@ function Gem:draw()
    g.rotate(self.body:getAngle())
    g.rectangle('fill', -8, -8, 16, 16)
    g.pop()
+end
+
+function Gem:collision(other)
+   if other.class == Player then
+      print("Jem!")
+   elseif other.class == Crate then
+      local dx = other.body:getX() - self.body:getX()
+      local dy = other.body:getY() - self.body:getY()
+      other.body:applyLinearImpulse(dx*15, dy*15)
+   end
 end
 
 return Gem

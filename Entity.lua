@@ -50,6 +50,9 @@ function Entity:remove()
    self.dead = true
 end
 
+-- Implement this to handle collisions with other entities.
+-- function Entity:collision(entity)
+
 ----------------------------------------
 
 function Entity.static.setup(world)
