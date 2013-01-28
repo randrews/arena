@@ -2,6 +2,7 @@ require('middleclass')
 require('Entity')
 require('Player')
 require('Crate')
+require('Puff')
 
 Gem = class('Gem', Entity)
 
@@ -25,8 +26,9 @@ end
 
 function Gem:collision(other)
    if other.class == Player then
-      print("Jem!")
+      Puff(self:location(), self.body:getAngle())
       self:remove()
+
    elseif other.class == Crate then
       local dx = other.body:getX() - self.body:getX()
       local dy = other.body:getY() - self.body:getY()

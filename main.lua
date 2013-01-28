@@ -16,6 +16,8 @@ require('Gem')
 require('Mob')
 require('Shooter')
 require('Level')
+require('Effect')
+require('Puff')
 
 local level = nil
 
@@ -71,6 +73,7 @@ function love.draw()
    love.graphics.translate(-center.x + 400, -center.y + 300)
 
    level:draw()
+   Effect.draw()
 
    love.graphics.pop()
 
@@ -81,5 +84,6 @@ function love.update(dt)
    FPS = math.floor(1 / dt)
    Clock.update(dt)
    level:update(dt)
+   Effect.update(dt)
    Entity.cull()
 end
