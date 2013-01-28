@@ -18,15 +18,15 @@ function Player:draw()
 end
 
 function Player:update(dt)
-   local dir, keys_down = self:readDirection()
+   local dir, keys_down, conflict = self:readDirection()
 
-   if keys_down > 0 then
-      self.body:setLinearDamping(0)
+   if conflict or keys_down == 0 then
+      self.body:setLinearDamping(12)
    else
-      self.body:setLinearDamping(8)
+      self.body:setLinearDamping(0)
    end
 
-   self:max_speed(self.speed)
+   self:max_speed(self.speed/2)
    self.body:applyForce(dir.x * self.speed, dir.y * self.speed)
 
    if keys_down == 1 then
@@ -53,7 +53,9 @@ function Player:readDirection()
    if k('left') then dir = dir + Point.left ; kd = kd + 1 end
    if k('right') then dir = dir + Point.right ; kd = kd + 1 end
 
-   return dir, kd
+   local conflict = k('up') and k('down') or k('left') and k('right')
+
+   return dir, kd, conflict
 end
 
 -- Dampens tangential motion while we're accelerating in a direction
