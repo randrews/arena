@@ -5,12 +5,7 @@ Effect = class('Effect')
 Effect.all = List{}
 
 function Effect.static.update(dt)
-   Effect.all:map(function(e)
-                     e:update_tweens(dt)
-                     e:update_duration(dt)
-                     e:update(dt)
-                  end)
-
+   Effect.all:method_map('skip_time', dt)
    Effect.all = Effect.all:method_select('alive')
 end
 
@@ -23,6 +18,12 @@ function Effect:initialize(duration)
    self.tweens = List{}
    self.duration = duration or 0
    self.time = 0
+end
+
+function Effect:skip_time(dt)
+   self:update_tweens(dt)
+   self:update_duration(dt)
+   self:update(dt)
 end
 
 function Effect:alive()

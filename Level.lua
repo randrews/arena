@@ -49,6 +49,7 @@ function Level:load()
 
    assert(player_loc, "Your map doesn't have a player on it.")
    self.player = Player(self.world, player_loc)
+   self:init_floor_glow()
 end
 
 function Level:draw()
@@ -75,11 +76,37 @@ function Level:draw()
 
 end
 
+function Level:init_floor_glow()
+   self.floor:map(function(f)
+                     if math.random(5) == 1 then
+                        f.effect = Glow(math.random(3000) / 1000)
+                     end
+                  end)
+end
+
+function Level:update_floor_glow()
+   -- First, remove the effects from all the tiles with dead effects
+   local finished = 0
+   self.floor:map(function(f)
+                     if f:finish_glow() then finished = finished + 1 end
+                  end)
+
+   -- Spawn new glows to replace the finished ones
+   while finished > 0 do
+      local f = self.floor:random()
+      if not f:glowing() then
+         f:start_glow()
+         finished = finished - 1
+      end
+   end
+end
+
 function Level:update(dt)
    self.player:update(dt)
    self.entities:method_map('update', dt)
    self.world:update(dt)
    self.entities = self.entities:method_select('alive')
+   self:update_floor_glow()
 end
 
 return Level
