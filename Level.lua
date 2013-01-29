@@ -7,6 +7,7 @@ require('Player')
 require('Crate')
 require('Gem')
 require('Zoom')
+require('Floor')
 
 Level = class('Level')
 
@@ -23,10 +24,15 @@ function Level:load()
    Wall.setup(self.world)
 
    self.entities = List{}
+   self.floor = List{}
    for tile_coord in self.map:each() do
       local c = self.map(tile_coord)
       local p = tile_coord * 32 - Point(16, 16)
       local entity = nil
+
+      if c ~= ' ' and c ~= '#' then
+         self.floor:push(Floor(p))
+      end
 
       if c == '#' then
          entity = Wall(p, 32, 32)
@@ -57,6 +63,7 @@ function Level:draw()
 
    --------------------
 
+   self.floor:method_map('draw')
    Bullet.draw()
    self.player:draw()
    self.entities:method_map('draw')
