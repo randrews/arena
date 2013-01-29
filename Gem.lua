@@ -17,7 +17,7 @@ function Gem:draw()
    local g = love.graphics
    local l = self:location()
    g.push()
-   g.setColor(190, 190, 30)
+   g.setColor(240, 160, 30)
    g.translate(l())
    g.rotate(self.body:getAngle())
    g.rectangle('fill', -8, -8, 16, 16)

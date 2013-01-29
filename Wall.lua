@@ -20,8 +20,8 @@ end
 
 function Wall:draw()
    local w, h = self.size()
-   love.graphics.setColor(155, 155, 155)
-   love.graphics.rectangle('fill',
+   love.graphics.setColor(255, 255, 255)
+   love.graphics.rectangle('line',
                            self.location.x-w/2,
                            self.location.y-h/2,
                            w, h)

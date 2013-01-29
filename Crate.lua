@@ -14,7 +14,7 @@ function Crate:initialize(world, x, y)
 end
 
 function Crate:draw()
-   love.graphics.setColor(180, 120, 90)
+   love.graphics.setColor(140, 140, 140)
    love.graphics.rectangle('fill',
                            self.body:getX()-15,
                            self.body:getY()-15, 30, 30)

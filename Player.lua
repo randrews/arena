@@ -13,8 +13,8 @@ end
 
 function Player:draw()
    local g = love.graphics
-   g.setColor(160, 64, 64)
-   g.circle('fill', self.body:getX(), self.body:getY(), 16)
+   g.setColor(134, 134, 240)
+   g.circle('fill', self.body:getX(), self.body:getY(), 14)
 end
 
 function Player:update(dt)

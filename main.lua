@@ -24,7 +24,7 @@ local level = nil
 function love.load()
    math.randomseed(os.time())
    love.physics.setMeter(32)
-   love.graphics.setBackgroundColor(64, 120, 64)
+   love.graphics.setBackgroundColor(0, 0, 20)
 
    level = Level{
       map = {
