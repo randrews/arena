@@ -21,6 +21,23 @@ function Map.static.new_from_strings(strs)
    return l
 end
 
+function Map.static.new_from_string(str)
+   assert(type(str) == 'string')
+   local strs = {}
+   local line = ''
+   for n = 1, #str do
+      local c = str:sub(n,n)
+      if c == "\n" then
+         table.insert(strs, line)
+         line = ''
+      else
+         line = line .. c
+      end
+   end
+
+   return Map.new_from_strings(strs)
+end
+
 function Map:at(pt, val)
    if self:inside(pt) then
       if val~=nil then self.cells[pt.x+pt.y*self.width] = val end

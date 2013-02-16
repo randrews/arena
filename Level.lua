@@ -11,69 +11,14 @@ require('Floor')
 
 Level = class('Level')
 
-function Level:initialize(opts)
-   assert(type(opts) == 'table')
-
-   self.map = Map.new_from_strings(opts.map)
-   self.zoom = Zoom()
+function Level:initialize()
+   self.world = love.physics.newWorld(0, 0)
 end
 
 function Level:load()
-   self.world = love.physics.newWorld(0, 0)
+   self.zoom = Zoom()
    Entity.setup(self.world)
-   Wall.setup(self.world)
-
-   self.floor = self:init_floor()
-   self.entities = self:init_entities()
-   self.player = self:init_player()
-
-   self:init_floor_glow()
-end
-
-function Level:init_floor()
-   local floor = List{}
-
-   for tile_coord in self.map:each() do
-      local c = self.map(tile_coord)
-      local p = tile_coord * 32 - Point(16, 16)
-
-      if c ~= ' ' and c ~= '#' then
-         floor:push(Floor(p))
-      end
-   end
-
-   return floor
-end
-
-function Level:init_entities()
-   local entities = List{}
-
-   for tile_coord in self.map:each() do
-      local c = self.map(tile_coord)
-      local p = tile_coord * 32 - Point(16, 16)
-      local entity = nil
-
-      if c == '#' then
-         entity = Wall(p, 32, 32)
-      elseif c == '=' then
-         entity = Crate(self.world, p.x, p.y)
-      elseif c == '*' then
-         entity = Gem(self.world, p)
-      elseif c == '@' then
-         player_loc = p
-      end
-
-      if entity then entities:push(entity) end
-   end
-
-   return entities
-end
-
-function Level:init_player()
-   local player_loc = self.map:find_value('@'):shift()
-   assert(player_loc, "Your map doesn't have a player on it.")
-   local p = player_loc * 32 - Point(16, 16)
-   return Player(self.world, p)
+   self:start_floor_glow()
 end
 
 function Level:draw()
@@ -100,7 +45,7 @@ function Level:draw()
 
 end
 
-function Level:init_floor_glow()
+function Level:start_floor_glow()
    self.floor:map(function(f)
                      if math.random(5) == 1 then
                         f.effect = Glow(math.random(3000) / 1000)
