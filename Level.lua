@@ -36,7 +36,7 @@ function Level:load()
 
       if c == '#' then
          entity = Wall(p, 32, 32)
-      elseif c == 'o' then
+      elseif c == '=' then
          entity = Crate(self.world, p.x, p.y)
       elseif c == '*' then
          entity = Gem(self.world, p)
