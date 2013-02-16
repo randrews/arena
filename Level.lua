@@ -23,16 +23,35 @@ function Level:load()
    Entity.setup(self.world)
    Wall.setup(self.world)
 
-   self.entities = List{}
-   self.floor = List{}
+   self.floor = self:init_floor()
+   self.entities = self:init_entities()
+   self.player = self:init_player()
+
+   self:init_floor_glow()
+end
+
+function Level:init_floor()
+   local floor = List{}
+
+   for tile_coord in self.map:each() do
+      local c = self.map(tile_coord)
+      local p = tile_coord * 32 - Point(16, 16)
+
+      if c ~= ' ' and c ~= '#' then
+         floor:push(Floor(p))
+      end
+   end
+
+   return floor
+end
+
+function Level:init_entities()
+   local entities = List{}
+
    for tile_coord in self.map:each() do
       local c = self.map(tile_coord)
       local p = tile_coord * 32 - Point(16, 16)
       local entity = nil
-
-      if c ~= ' ' and c ~= '#' then
-         self.floor:push(Floor(p))
-      end
 
       if c == '#' then
          entity = Wall(p, 32, 32)
@@ -44,12 +63,17 @@ function Level:load()
          player_loc = p
       end
 
-      if entity then self.entities:push(entity) end
+      if entity then entities:push(entity) end
    end
 
+   return entities
+end
+
+function Level:init_player()
+   local player_loc = self.map:find_value('@'):shift()
    assert(player_loc, "Your map doesn't have a player on it.")
-   self.player = Player(self.world, player_loc)
-   self:init_floor_glow()
+   local p = player_loc * 32 - Point(16, 16)
+   return Player(self.world, p)
 end
 
 function Level:draw()
