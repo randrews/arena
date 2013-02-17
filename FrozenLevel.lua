@@ -34,10 +34,10 @@ function FrozenLevel:thaw()
 
    level_spec.portals:map(function(portal_spec)
                              local loc = waypoints[tostring(portal_spec[1])]
-                             entities:push(Portal(world, loc))
+                             entities:push(Portal(world, loc, level))
                           end)
 
-   level.entities = entities
+   level:setEntities(entities)
 
    return level
 end
@@ -63,7 +63,7 @@ function FrozenLevel:init_floor(map, world)
       local c = map(tile_coord)
       local p = tile_coord * 32 - Point(16, 16)
 
-      if c ~= ' ' and c ~= '#' then
+      if c ~= '' and c ~= ' ' and c ~= '#' then
          floor:push(Floor(p))
       end
    end

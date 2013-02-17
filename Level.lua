@@ -15,6 +15,13 @@ function Level:initialize()
    self.world = love.physics.newWorld(0, 0)
 end
 
+function Level:setEntities(ents)
+   assert(ents.class == List)
+   self.entities = ents
+
+   self.starting_gems = self:remaining_gems()
+end
+
 function Level:load()
    self.zoom = Zoom()
    Entity.setup(self.world)
@@ -76,6 +83,11 @@ function Level:update(dt)
    self.world:update(dt)
    self.entities = self.entities:method_select('alive')
    self:update_floor_glow()
+end
+
+function Level:remaining_gems()
+   local gems = self.entities:select(function(e) return e.class == Gem end)
+   return gems:length()
 end
 
 return Level
