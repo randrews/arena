@@ -1,11 +1,11 @@
 Entity = class('Entity')
 Entity.graveyard = List{} -- List of entities to be removed
 
-function Entity:setup(world, location, shape, body)
+function Entity:setup(world, location, shape, body, fixture)
    assert(world and location and shape)
    self.body = body or love.physics.newBody(world, location.x, location.y, 'dynamic')
    self.shape = shape
-   self.fixture = love.physics.newFixture(self.body, self.shape)
+   self.fixture = fixture or love.physics.newFixture(self.body, self.shape)
    self.world = world
    self.fixture:setUserData(self)
 end
@@ -63,8 +63,8 @@ end
 
 function Entity.static.collision(fix_a, fix_b)
    local ent_a, ent_b = fix_a:getUserData(), fix_b:getUserData()
-   if ent_a.collision then ent_a:collision(ent_b) end
-   if ent_b.collision then ent_b:collision(ent_a) end
+   if ent_a and ent_a.collision then ent_a:collision(ent_b) end
+   if ent_b and ent_b.collision then ent_b:collision(ent_a) end
 end
 
 function Entity.static.cull()

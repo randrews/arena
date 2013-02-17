@@ -4,8 +4,8 @@ require('Entity')
 Crate = class('Crate', Entity)
 Crate.CATEGORY = 3
 
-function Crate:initialize(world, x, y)
-   self:rectangle(world, Point(x, y), 30, 30)
+function Crate:initialize(world, location)
+   self:rectangle(world, location, 30, 30)
    self.body:setFixedRotation(true)
    self.body:setMass(5)
    self.body:setLinearDamping(4)

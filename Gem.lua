@@ -8,8 +8,8 @@ Gem = class('Gem', Entity)
 
 function Gem:initialize(world, location)
    self:rectangle(world, location, 16, 16)
-   self.body:setAngle(math.pi/4)
-   self.body:applyTorque(150)
+   --self.body:setAngle(math.random(24) * math.pi / 12)
+   self.body:setAngularVelocity(4)
    self.fixture:setSensor(true)
 end
 
