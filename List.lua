@@ -28,6 +28,18 @@ end
 
 ----------------------------------------
 
+function List:push_all(items)
+   if items.class == List then items = items.items end
+   for _, v in ipairs(items) do table.insert(self.items, v) end
+end
+
+function List:unshift_all(items)
+   if items.class == List then items = items.items end
+   for _, v in ipairs(items) do table.insert(self.items, v, 1) end
+end
+
+----------------------------------------
+
 function List:length()
    return #(self.items)
 end

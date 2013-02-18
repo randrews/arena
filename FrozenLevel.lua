@@ -21,25 +21,32 @@ function FrozenLevel:load()
 end
 
 function FrozenLevel:thaw()
+   self.level_spec = self:load()
+   self.map = Map.new_from_string(self.level_spec.map)
+   self.waypoints = self:init_waypoints(self.map)
+
    local level = Level()
-   local world = level.world
-   local level_spec = self:load()
-   local map = Map.new_from_string(level_spec.map)
 
-   level.floor = self:init_floor(map, world)
-   level.player = self:init_player(map, world)
+   level.floor = self:init_floor(self.map, level.world)
+   level.player = self:init_player(self.map, level.world)
 
-   local waypoints = self:init_waypoints(map)
-   local entities = self:init_entities(map, world)
+   local entities = self:init_entities(self.map, level.world)
 
-   level_spec.portals:map(function(portal_spec)
-                             local loc = waypoints[tostring(portal_spec[1])]
-                             entities:push(Portal(world, loc, level))
-                          end)
+   entities:push_all(self:init_portals(level))
 
    level:setEntities(entities)
 
    return level
+end
+
+function FrozenLevel:init_portals(level)
+   local function make_portal(portal_spec)
+      local loc = self.waypoints[tostring(portal_spec[1])]
+      local dest = portal_spec[2]
+      return Portal(level.world, loc, level, dest)
+   end
+
+   return self.level_spec.portals:map(make_portal)
 end
 
 function FrozenLevel:init_waypoints(map)

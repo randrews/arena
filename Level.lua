@@ -7,12 +7,14 @@ require('Player')
 require('Crate')
 require('Gem')
 require('Zoom')
+require('ExitLevel')
 require('Floor')
 
 Level = class('Level')
 
 function Level:initialize()
    self.world = love.physics.newWorld(0, 0)
+   self.freeze_player = false -- Set to true when we are in the exit-level animation
 end
 
 function Level:setEntities(ents)
@@ -23,20 +25,16 @@ function Level:setEntities(ents)
 end
 
 function Level:load()
-   self.zoom = Zoom()
+   self.effect = Zoom()
    Entity.setup(self.world)
    self:start_floor_glow()
 end
 
 function Level:draw()
    local center = self.player:location()
-   local width, height = love.graphics.getWidth(), love.graphics.getHeight()
-   local z = self.zoom.zoom
 
    love.graphics.push()
-   love.graphics.scale(z)
-   love.graphics.translate(width/2/z - center.x,
-                           height/2/z - center.y)
+   if self.effect then self.effect:applyTransform(center) end
 
    --------------------
 
@@ -78,7 +76,11 @@ function Level:update_floor_glow()
 end
 
 function Level:update(dt)
-   self.player:update(dt)
+   if not self.freeze_player then
+      self.player:update(dt)
+   else
+      self.player:brake(dt)
+   end
    self.entities:method_map('update', dt)
    self.world:update(dt)
    self.entities = self.entities:method_select('alive')
@@ -88,6 +90,11 @@ end
 function Level:remaining_gems()
    local gems = self.entities:select(function(e) return e.class == Gem end)
    return gems:length()
+end
+
+function Level:exit_to(destination)
+   self.freeze_player = true
+   self.effect = ExitLevel(self)
 end
 
 return Level

@@ -69,11 +69,13 @@ function Effect:update_duration(dt)
    self.time = self.time + dt
    if self.duration > 0 and self.time >= self.duration then
       self:finish()
+      self:on_finish()
    end
 end
 
 -- Stuff you can (should) override
 function Effect:update(dt) end
 function Effect:draw() end
+function Effect:on_finish() end
 
 return Effect

@@ -3,11 +3,12 @@ require('Entity')
 
 Portal = class('Portal', Entity)
 
-function Portal:initialize(world, location, level)
+function Portal:initialize(world, location, level, destination)
    self:circle(world, location, 5)
    self.body:setType('static')
    self.fixture:setSensor(true)
    self.level = level
+   self.destination = destination
 end
 
 function Portal:draw()
@@ -25,7 +26,7 @@ function Portal:draw()
       local a = gem_angle * (lv.starting_gems - lv:remaining_gems())
       g.arc('fill', 0, 0, 15, 0, a)
    else
-      g.setColor(50, 35, 120)
+      g.setColor(0, 0, 20)
       g.circle('fill', 0, 0, 15, 20)
    end
 
@@ -33,8 +34,8 @@ function Portal:draw()
 end
 
 function Portal:collision(other)
-   if other.class == Player then
-      print(self:open())
+   if other.class == Player and self:open() then
+      self.level:exit_to(self.destination)
    end
 end
 

@@ -34,6 +34,13 @@ function Player:update(dt)
    end
 end
 
+-- Treat the player as if all controls went dead: in other words,
+-- brake to a quick stop (this happens when the level ends and we
+-- jump into a portal
+function Player:brake()
+   self.body:setLinearDamping(12)
+end
+
 function Player:collision(entity)
    if instanceOf(Bullet, entity) then
       print("Shot")
