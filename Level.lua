@@ -15,6 +15,7 @@ Level = class('Level')
 function Level:initialize()
    self.world = love.physics.newWorld(0, 0)
    self.freeze_player = false -- Set to true when we are in the exit-level animation
+   self.game = nil
 end
 
 function Level:setEntities(ents)
@@ -24,17 +25,19 @@ function Level:setEntities(ents)
    self.starting_gems = self:remaining_gems()
 end
 
+function Level:setGame(game)
+   self.game = game
+end
+
 function Level:load()
-   self.effect = Zoom()
+   self.effect = Zoom(self.player)
    Entity.setup(self.world)
    self:start_floor_glow()
 end
 
 function Level:draw()
-   local center = self.player:location()
-
    love.graphics.push()
-   if self.effect then self.effect:applyTransform(center) end
+   if self.effect then self.effect:applyTransform() end
 
    --------------------
 
@@ -92,9 +95,12 @@ function Level:remaining_gems()
    return gems:length()
 end
 
-function Level:exit_to(destination)
+function Level:exit_to(portal, destination)
    self.freeze_player = true
-   self.effect = ExitLevel(self)
+   self.effect = ExitLevel(self, portal)
+   self.effect.on_finish = function()
+                              self.game:start_level(destination)
+                           end
 end
 
 return Level

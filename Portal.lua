@@ -35,7 +35,7 @@ end
 
 function Portal:collision(other)
    if other.class == Player and self:open() then
-      self.level:exit_to(self.destination)
+      self.level:exit_to(self, self.destination)
    end
 end
 

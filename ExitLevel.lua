@@ -4,15 +4,12 @@ require('Zoom')
 
 ExitLevel = class('ExitLevel', Zoom)
 
-function ExitLevel:initialize(level)
+function ExitLevel:initialize(level, center_on)
    self.level = level
-   Effect.initialize(self, 4)
+   self.center_on = center_on
+   Effect.initialize(self, 2)
 
    self:tween('zoom', 1, 100, self.duration)
-end
-
-function ExitLevel:on_finish()
-   print('Exiting')
 end
 
 return ExitLevel
