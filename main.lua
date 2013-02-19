@@ -1,4 +1,5 @@
 require('middleclass')
+require('loveframes')
 
 require('Point')
 require('Clock')
@@ -19,6 +20,7 @@ require('Level')
 require('Game')
 require('Effect')
 require('Puff')
+require('MainMenu')
 
 local game = nil
 
@@ -27,13 +29,16 @@ function love.load()
    love.physics.setMeter(32)
    love.graphics.setBackgroundColor(0, 0, 20)
 
-   game = Game('tutorial.lua')
-   game:start()
+   local m = MainMenu()
+   m:show()
+   --game = Game('tutorial.lua')
+   --game:start()
 end
 
 function love.draw()
-   game:draw()
+   --game:draw()
    if FPS then love.graphics.setColor(255, 255, 255) ; love.graphics.print(FPS, 0, 0) end
+   loveframes.draw()
 end
 
 function love.update(dt)
@@ -41,5 +46,22 @@ function love.update(dt)
    Clock.update(dt)
    Effect.update(dt)
    Entity.cull()
-   game:update(dt)
+   loveframes.update(dt)
+   --game:update(dt)
+end
+
+function love.mousepressed(x, y, button)
+   loveframes.mousepressed(x, y, button)
+end
+
+function love.mousereleased(x, y, button)
+   loveframes.mousereleased(x, y, button)
+end
+
+function love.keypressed(key, unicode)
+   loveframes.keypressed(key, unicode)
+end
+
+function love.keyreleased(key)
+   loveframes.keyreleased(key)
 end
